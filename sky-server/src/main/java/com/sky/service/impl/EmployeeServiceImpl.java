@@ -1,25 +1,32 @@
 package com.sky.service.impl;
 
 
-import com.sky.constant.MessageConstant;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.sky.constant.JwtClaimsConstant;
+import com.sky.constant.PasswordConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.properties.JwtProperties;
+import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -57,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //生成JWT
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("id", employee.getId());
+        claims.put(JwtClaimsConstant.EMP_ID, employee.getId());
 
         String token = JwtUtil.createJWT(
                 jwtProperties.getAdminSecretKey(),
@@ -72,5 +79,65 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .name(employee.getName())
                 .token(token)
                 .build();
+    }
+
+    /**
+     * 员工分页查询
+     * @param pageQueryDTO
+     * @return
+     */
+    public PageResult pageQuery(EmployeePageQueryDTO pageQueryDTO) {
+        PageHelper.startPage(pageQueryDTO.getPage(),pageQueryDTO.getPageSize());
+        List<Employee> list = employeeMapper.pageQuery(pageQueryDTO);
+
+        Page<Employee> page = (Page<Employee>) list;
+        return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * 员工退出登录
+     */
+    public void logout() {
+
+    }
+
+    /**
+     * 新增员工
+     * @param dto
+     */
+    public void save(EmployeeDTO dto) {
+       Employee employee = new Employee();
+
+       BeanUtils.copyProperties(dto, employee);
+
+       employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+
+       employee.setStatus(0);
+
+       employeeMapper.insert(employee);
+    }
+
+    /**
+     * 根据id查询员工
+     * @param id
+     * @return
+     */
+    public Employee getById(Long id) {
+         Employee employee = employeeMapper.getById(id);
+         return employee;
+    }
+
+    /**
+     * 编辑员工信息
+     * @param dto
+     * @return
+     */
+    public void update(EmployeeDTO dto) {
+
+        Employee employee = new Employee();
+
+        BeanUtils.copyProperties(dto,employee);
+
+        employeeMapper.update(employee);
     }
 }

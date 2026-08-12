@@ -2,4 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.EmployeeMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into employee
+            (name, username, password, phone, sex, id_number, status)
+        values
+            (#{name}, #{username}, #{password}, #{phone}, #{sex}, #{idNumber}, #{status})
+    </insert>
+
+    <select id="pageQuery" resultType="com.sky.entity.Employee" >
+        select * from employee
+
+        <where>
+
+        <if test="name != null">
+        and name like concat('%',#{name},'%')
+        </if>
+
+        </where>
+
+        order by create_time desc
+
+    </select>
+
+
+    <update id="update">
+        update employee
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="idNumber != null">id_number = #{idNumber},</if>
+        </set>
+        where id = #{id}
+    </update>
+
 </mapper>
