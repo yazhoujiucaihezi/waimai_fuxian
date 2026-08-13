@@ -5,12 +5,15 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.constant.PasswordConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.PasswordEditFailedException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.properties.JwtProperties;
@@ -137,6 +140,40 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee();
 
         BeanUtils.copyProperties(dto,employee);
+
+        employeeMapper.update(employee);
+    }
+
+    /**
+     * 启用禁用员工账号
+     * @param id
+     */
+    public void startOrStop(Long id, Integer status) {
+        employeeMapper.startOrStop(id, status);
+    }
+
+    /**
+     * 修改密码
+     * @param passwordEditDTO
+     */
+    public void editPassword(PasswordEditDTO passwordEditDTO) {
+        String oldPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getOldPassword().getBytes());
+        Long id = BaseContext.getCurrentId();
+        Employee employee = employeeMapper.getById(id);
+
+        //判断旧密码是否正确
+        if(!employee.getPassword().equals(oldPassword)){
+            throw new PasswordErrorException("原密码不正确");
+        }
+
+        String newPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getNewPassword().getBytes());
+
+        //判断新密码是否和旧密码重合
+        if(newPassword.equals(oldPassword)){
+            throw new PasswordEditFailedException("新密码不能与旧密码相同");
+        }
+
+        employee.setPassword(newPassword);
 
         employeeMapper.update(employee);
     }

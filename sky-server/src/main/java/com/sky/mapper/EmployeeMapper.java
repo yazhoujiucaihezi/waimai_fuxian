@@ -3,9 +3,11 @@ package com.sky.mapper;
 
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -47,4 +49,10 @@ public interface EmployeeMapper {
      * @return
      */
     void update(Employee employee);
+
+    /**
+     * 启用禁用员工账号
+     * @param id
+     */
+    void startOrStop(Long id, Integer status);
 }

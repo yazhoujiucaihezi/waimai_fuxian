@@ -25,7 +25,6 @@
 
     </select>
 
-
     <update id="update">
         update employee
         <set>
@@ -34,6 +33,16 @@
             <if test="phone != null">phone = #{phone},</if>
             <if test="sex != null">sex = #{sex},</if>
             <if test="idNumber != null">id_number = #{idNumber},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="password != null">password = #{password},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="startOrStop">
+        update employee
+        <set>
+            <if test="status != null">status = #{status}</if>
         </set>
         where id = #{id}
     </update>

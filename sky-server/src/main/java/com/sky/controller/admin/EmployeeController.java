@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
@@ -92,6 +93,28 @@ public class EmployeeController {
     public Result update(@RequestBody EmployeeDTO dto){
         log.info("编辑员工信息: {}",dto);
         employeeService.update(dto);
+        return Result.success();
+    }
+
+    /**
+     * 启用，禁用员工账号
+     * @param status
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@RequestParam Long id, @PathVariable Integer status){
+        employeeService.startOrStop(id, status);
+        return Result.success();
+    }
+
+    /**
+     * 修改密码
+     * @param passwordEditDTO
+     * @return
+     */
+    @PutMapping("/editPassword")
+    public Result editPassword(@RequestBody PasswordEditDTO passwordEditDTO){
+        employeeService.editPassword(passwordEditDTO);
         return Result.success();
     }
 }
