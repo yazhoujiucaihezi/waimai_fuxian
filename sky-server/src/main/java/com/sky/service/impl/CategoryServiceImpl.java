@@ -7,7 +7,6 @@ import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
-import com.sky.entity.Employee;
 import com.sky.mapper.CategoryMapper;
 import com.sky.result.PageResult;
 import com.sky.service.CategoryService;
@@ -57,7 +56,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     public void delete(Long id) {
         categoryMapper.delete(id);
-
     }
     /**
      * 修改分类
@@ -78,5 +76,10 @@ public class CategoryServiceImpl implements CategoryService {
         category.setStatus(status);
         category.setId(id);
         categoryMapper.update(category);
+    }
+
+    public List<Category> list(Integer type) {
+        Category category = new Category();
+        return categoryMapper.list(category);
     }
 }

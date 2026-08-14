@@ -6,6 +6,8 @@ import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.result.PageResult;
 
+import java.util.List;
+
 public interface CategoryService {
 
     /**
@@ -36,4 +38,7 @@ public interface CategoryService {
      * 修改分类状态
      */
     void updateStatus(Integer status, Long id);
+
+    List<Category> list(Integer type);
+
 }

@@ -22,6 +22,17 @@
         order by sort asc
     </select>
 
+    <select id="list" resultType="com.sky.entity.Category">
+        select * from category
+        <where>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+        </where>
+
+        order by sort asc
+    </select>
+
     <delete id="delete">
         delete from category where id = #{id}
     </delete>

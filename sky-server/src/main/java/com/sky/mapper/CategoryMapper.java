@@ -19,4 +19,5 @@ public interface CategoryMapper {
 
     void update(Category category);
 
+    List<Category> list(Category category);
 }
