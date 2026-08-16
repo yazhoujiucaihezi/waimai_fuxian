@@ -11,6 +11,9 @@ import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
+/**
+ * 员工数据访问层
+ */
 @Mapper
 public interface EmployeeMapper {
 

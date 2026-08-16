@@ -8,6 +8,9 @@ import com.sky.result.PageResult;
 
 import java.util.List;
 
+/**
+ * 分类业务层
+ */
 public interface CategoryService {
 
     /**
@@ -39,6 +42,11 @@ public interface CategoryService {
      */
     void updateStatus(Integer status, Long id);
 
+    /**
+     * 根据类型查询分类
+     * @param type
+     * @return
+     */
     List<Category> list(Integer type);
 
 }

@@ -87,9 +87,9 @@ public class DishController {
      * 根据分类id查询菜品列表
      */
     @GetMapping("/list")
-    public Result<List<DishVO>> list(@RequestParam Long categoryId, @RequestParam Integer status) {
+    public Result<List<DishVO>> list(@RequestParam Long categoryId) {
         log.info("根据分类id查询菜品列表");
-        List<DishVO> list = dishService.list(categoryId, status);
+        List<DishVO> list = dishService.list(categoryId);
         return Result.success(list);
     }
 }

@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * 菜品数据访问层
+ */
 @Mapper
 public interface DishMapper {
 
@@ -21,11 +24,29 @@ public interface DishMapper {
      */
     List<DishVO> page(DishPageQueryDTO dto);
 
+    /**
+     * 新增菜品
+     * @param dish
+     */
     void insert(Dish dish);
 
+    /**
+     * 修改菜品
+     * @param dish
+     */
     void update(Dish dish);
 
+    /**
+     * 根据id删除菜品
+     * @param id
+     */
     void deleteById(Long id);
 
-    List<DishVO> list(Long categoryId,Integer status);
+    /**
+     * 根据分类id查询菜品列表
+     *
+     * @param categoryId
+     * @return
+     */
+    List<DishVO> list(Long categoryId);
 }

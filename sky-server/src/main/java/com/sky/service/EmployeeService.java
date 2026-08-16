@@ -8,6 +8,9 @@ import com.sky.entity.Employee;
 import com.sky.result.PageResult;
 import com.sky.vo.EmployeeLoginVO;
 
+/**
+ * 员工业务层
+ */
 public interface EmployeeService {
 
     /**

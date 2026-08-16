@@ -52,12 +52,8 @@
         order by d.category_id desc
     </select>
     <select id="list" resultType="com.sky.vo.DishVO">
-        select from dish
+        select * from dish
         where category_id = #{categoryId}
-        and
-            <if test="status != null">
-                status = #{status}
-            </if>
-        order by dish_id desc
+        order by id desc
     </select>
 </mapper>

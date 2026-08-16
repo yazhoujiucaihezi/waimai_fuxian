@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 菜品业务层实现类
+ */
 @Service
 public class DishServiceImpl implements DishService {
 
@@ -49,6 +52,9 @@ public class DishServiceImpl implements DishService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    /**
+     * 新增菜品
+     */
     @Override
     public void save(DishDTO dishDTO) {
         Dish dish = new Dish();
@@ -63,7 +69,6 @@ public class DishServiceImpl implements DishService {
         List<DishFlavor> flavors = dishDTO.getFlavors();
         if (flavors != null) {
             for (DishFlavor flavor : flavors) {
-
                 flavor.setDishId(id);
                 dishFlavorMapper.insert(flavor);
             }
@@ -107,8 +112,14 @@ public class DishServiceImpl implements DishService {
         dishMapper.update(dish);
     }
 
-    public List<DishVO> list(Long categoryId,Integer status) {
-        List<DishVO> list = dishMapper.list(categoryId,status);
+    /**
+     * 根据分类id查询菜品列表
+     *
+     * @param categoryId
+     * @return
+     */
+    public List<DishVO> list(Long categoryId) {
+        List<DishVO> list = dishMapper.list(categoryId);
         return list;
     }
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetmealMapper">
+    <insert id="save">
+        INSERT INTO setmeal (name, price, status, description, image, category_id, create_time, update_time,create_user,update_user)
+        VALUES (#{name}, #{price}, #{status}, #{description}, #{image}, #{categoryId}, #{createTime}, #{updateTime},#{createUser},#{updateUser})
+    </insert>
+
+    <insert id="saveSetmealDishes">
+        INSERT INTO setmeal_dish (setmeal_id, dish_id)
+        VALUES
+        <foreach collection="setmealDishes"
+                 item="setmealDish"
+                 separator=",">
+            (#{setmealDish.setmealId}, #{setmealDish.dishId})
+        </foreach>
+    </insert>
+
+    <select id="page" resultType="com.sky.vo.SetmealVO">
+        SELECT s.id, s.name, s.price, s.status, s.description, s.image, s.category_id, s.update_time, s.create_time
+        , category.name AS categoryName
+        FROM setmeal s
+        LEFT JOIN category ON s.category_id = category.id
+        <where>
+            <if test="name != null and name != ''">
+                AND s.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="categoryId != null">
+                AND s.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                AND s.status = #{status}
+            </if>
+        </where>
+        order by update_time DESC
+    </select>
+</mapper>

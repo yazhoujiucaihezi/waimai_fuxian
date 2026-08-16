@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 分类业务层实现类
+ */
 @Service
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
@@ -54,6 +57,10 @@ public class CategoryServiceImpl implements CategoryService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    /**
+     * 根据id删除分类
+     * @param id
+     */
     public void delete(Long id) {
         categoryMapper.delete(id);
     }
@@ -78,6 +85,11 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.update(category);
     }
 
+    /**
+     * 根据类型查询分类
+     * @param type
+     * @return
+     */
     public List<Category> list(Integer type) {
         Category category = new Category();
         return categoryMapper.list(category);

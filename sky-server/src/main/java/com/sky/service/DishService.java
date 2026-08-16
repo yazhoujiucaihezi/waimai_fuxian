@@ -7,6 +7,9 @@ import com.sky.vo.DishVO;
 
 import java.util.List;
 
+/**
+ * 菜品业务层
+ */
 public interface DishService {
     /**
      * 根据id查询菜品
@@ -39,5 +42,11 @@ public interface DishService {
      */
     void startOrStop(Integer status, Long id);
 
-    List<DishVO> list(Long categoryId, Integer status);
+    /**
+     * 根据分类id查询菜品列表
+     *
+     * @param categoryId
+     * @return
+     */
+    List<DishVO> list(Long categoryId);
 }
