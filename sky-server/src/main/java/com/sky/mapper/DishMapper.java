@@ -22,4 +22,10 @@ public interface DishMapper {
     List<DishVO> page(DishPageQueryDTO dto);
 
     void insert(Dish dish);
+
+    void update(Dish dish);
+
+    void deleteById(Long id);
+
+    List<DishVO> list(Long categoryId,Integer status);
 }

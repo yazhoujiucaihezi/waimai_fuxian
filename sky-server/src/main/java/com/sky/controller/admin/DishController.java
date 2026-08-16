@@ -1,8 +1,8 @@
 package com.sky.controller.admin;
 
-import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.result.Result;
@@ -10,6 +10,8 @@ import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -49,5 +51,45 @@ public class DishController {
         log.info("新增菜品：{}", dishDTO);
         dishService.save(dishDTO);
         return Result.success();
+    }
+
+    /**
+     * 修改菜品
+     */
+    @PutMapping
+    public Result update(@RequestBody DishDTO dishDTO) {
+        log.info("修改菜品：{}", dishDTO);
+        dishService.update(dishDTO);
+        return Result.success();
+    }
+
+    /**
+     * 批量删除菜品
+     */
+    @DeleteMapping
+    public Result delete(@RequestParam List<Long> ids) {
+        log.info("批量删除菜品：{}", ids);
+        dishService.delete(ids);
+        return Result.success();
+    }
+
+    /**
+     * 修改菜品状态
+     */
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status,@RequestParam Long id){
+        log.info("修改菜品状态：{}", status);
+        dishService.startOrStop(status,id);
+        return Result.success();
+    }
+
+    /**
+     * 根据分类id查询菜品列表
+     */
+    @GetMapping("/list")
+    public Result<List<DishVO>> list(@RequestParam Long categoryId, @RequestParam Integer status) {
+        log.info("根据分类id查询菜品列表");
+        List<DishVO> list = dishService.list(categoryId, status);
+        return Result.success(list);
     }
 }
