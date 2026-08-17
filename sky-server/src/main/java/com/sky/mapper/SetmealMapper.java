@@ -31,4 +31,5 @@ public interface SetmealMapper {
 
     void saveSetmealDishes(@Param("setmealDishes") List<SetmealDish> setmealDishes);
 
+    SetmealVO getById(Long id);
 }

@@ -35,4 +35,11 @@
         </where>
         order by update_time DESC
     </select>
+    <select id="getById" resultType="com.sky.vo.SetmealVO">
+        SELECT s.id, s.name, s.price, s.status, s.description, s.image, s.category_id, s.update_time, s.create_time
+        , category.name AS categoryName
+        FROM setmeal s
+        LEFT JOIN category ON s.category_id = category.id
+        WHERE s.id = #{id}
+    </select>
 </mapper>

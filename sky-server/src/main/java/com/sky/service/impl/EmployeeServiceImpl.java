@@ -77,6 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 jwtProperties.getAdminTtl(),
                 claims
         );
+        System.out.println("token = " + token);
 
 
         return EmployeeLoginVO.builder()

@@ -23,4 +23,6 @@ public interface SetmealService {
      * @param setmealDTO
      */
     void save(SetmealDTO setmealDTO);
+
+    SetmealVO getById(Long id);
 }

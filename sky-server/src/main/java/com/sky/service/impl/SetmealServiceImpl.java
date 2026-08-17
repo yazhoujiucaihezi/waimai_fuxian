@@ -65,4 +65,8 @@ public class SetmealServiceImpl implements SetmealService {
         }
 
         }
+
+    public SetmealVO getById(Long id) {
+        return setmealMapper.getById(id);
+    }
 }
