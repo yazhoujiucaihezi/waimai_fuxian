@@ -8,14 +8,47 @@
     </insert>
 
     <insert id="saveSetmealDishes">
-        INSERT INTO setmeal_dish (setmeal_id, dish_id)
+        INSERT INTO setmeal_dish (setmeal_id, dish_id,name,price,copies)
         VALUES
         <foreach collection="setmealDishes"
                  item="setmealDish"
                  separator=",">
-            (#{setmealDish.setmealId}, #{setmealDish.dishId})
+            (#{setmealDish.setmealId}, #{setmealDish.dishId}, #{setmealDish.name}, #{setmealDish.price}, #{setmealDish.copies})
         </foreach>
     </insert>
+
+    <update id="update">
+        UPDATE setmeal
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="image != null and image != ''">
+                image = #{image},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            update_time = #{updateTime},
+            update_user = #{updateUser}
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteSetmealDishesBySetmealId">
+        DELETE FROM setmeal_dish WHERE setmeal_id = #{setmealId}
+    </delete>
+    <delete id="deleteById">
+        DELETE FROM setmeal WHERE id = #{id}
+    </delete>
 
     <select id="page" resultType="com.sky.vo.SetmealVO">
         SELECT s.id, s.name, s.price, s.status, s.description, s.image, s.category_id, s.update_time, s.create_time
@@ -35,11 +68,16 @@
         </where>
         order by update_time DESC
     </select>
-    <select id="getById" resultType="com.sky.vo.SetmealVO">
+    <select id="getById" resultType="com.sky.entity.Setmeal">
         SELECT s.id, s.name, s.price, s.status, s.description, s.image, s.category_id, s.update_time, s.create_time
         , category.name AS categoryName
         FROM setmeal s
         LEFT JOIN category ON s.category_id = category.id
         WHERE s.id = #{id}
+    </select>
+    <select id="getSetmealDishesBySetmealId" resultType="com.sky.entity.SetmealDish">
+        SELECT setmeal_dish.id, setmeal_dish.setmeal_id, setmeal_dish.dish_id, setmeal_dish.name, setmeal_dish.price, setmeal_dish.copies
+        FROM setmeal_dish
+        WHERE setmeal_dish.setmeal_id = #{setmealId}
     </select>
 </mapper>

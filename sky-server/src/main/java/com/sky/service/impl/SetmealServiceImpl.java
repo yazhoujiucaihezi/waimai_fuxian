@@ -61,12 +61,75 @@ public class SetmealServiceImpl implements SetmealService {
             for (SetmealDish setmealDish : setmealDishes) {
                 setmealDish.setSetmealId(id);
             }
+
+            System.out.println("setmealDishes = " + setmealDishes);
+
             setmealMapper.saveSetmealDishes(setmealDishes);
         }
 
         }
 
+    /**
+     * 根据id查询套餐
+     * @param id
+     * @return
+     */
     public SetmealVO getById(Long id) {
-        return setmealMapper.getById(id);
+        Setmeal setmeal = setmealMapper.getById(id);
+        List<SetmealDish> setmealDishes =
+                setmealMapper.getSetmealDishesBySetmealId(id);
+        SetmealVO setmealVO = new SetmealVO();
+        BeanUtils.copyProperties(setmeal, setmealVO);
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
+    }
+
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     */
+    public void update(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        setmeal.setUpdateUser(BaseContext.getCurrentId());
+        setmeal.setUpdateTime(LocalDateTime.now());
+        Long id = setmeal.getId();
+        setmealMapper.update(setmeal);
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        if (setmealDishes != null && setmealDishes.size() > 0) {
+            for (SetmealDish setmealDish : setmealDishes) {
+                setmealDish.setSetmealId(id);
+            }
+        }
+
+            setmealMapper.deleteSetmealDishesBySetmealId(id);
+
+            System.out.println("setmealDishes = " + setmealDishes);
+
+            setmealMapper.saveSetmealDishes(setmealDishes);
+    }
+
+    /**
+     * 修改套餐状态
+     * @param status
+     * @param id
+     */
+    public void updateStatus(Integer status, Long id) {
+        Setmeal setmeal = new Setmeal();
+        setmeal.setStatus(status);
+        setmeal.setId(id);
+        setmeal.setUpdateUser(BaseContext.getCurrentId());
+        setmeal.setUpdateTime(LocalDateTime.now());
+        setmealMapper.update(setmeal);
+    }
+
+    /**
+     * 删除套餐
+     * @param ids
+     */
+    public void delete(List<Long> ids) {
+        for (Long id : ids){
+            setmealMapper.deleteById(id);
+        }
     }
 }

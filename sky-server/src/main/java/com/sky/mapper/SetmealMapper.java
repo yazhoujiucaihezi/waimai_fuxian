@@ -28,8 +28,42 @@ public interface SetmealMapper {
      */
     void save(Setmeal setmeal);
 
-
+    /**
+     * 批量保存套餐和菜品的关联关系
+     * @param setmealDishes
+     */
     void saveSetmealDishes(@Param("setmealDishes") List<SetmealDish> setmealDishes);
 
-    SetmealVO getById(Long id);
+    /**
+     * 根据id查询套餐
+     *
+     * @param id
+     * @return
+     */
+    Setmeal getById(Long id);
+
+    /**
+     * 修改套餐
+     * @param setmeal
+     */
+    void update(Setmeal setmeal);
+
+    /**
+     * 根据套餐id查询套餐和菜品的关联关系
+     * @param id
+     * @return
+     */
+    List<SetmealDish> getSetmealDishesBySetmealId(Long id);
+
+    /**
+     * 根据套餐id删除套餐和菜品的关联关系
+     * @param id
+     */
+    void deleteSetmealDishesBySetmealId(Long id);
+
+    /**
+     * 根据id删除套餐
+     * @param id
+     */
+    void deleteById(Long id);
 }
