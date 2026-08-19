@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/admin/shop")
-public class ShopController {
+public class AShopController {
 
     public static final String key = "SHOP_STATUS";
 

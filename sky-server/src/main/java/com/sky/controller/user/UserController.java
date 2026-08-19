@@ -26,8 +26,6 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private User user;
-    @Autowired
     private JwtProperties jwtProperties;
 
     @PostMapping("/login")
