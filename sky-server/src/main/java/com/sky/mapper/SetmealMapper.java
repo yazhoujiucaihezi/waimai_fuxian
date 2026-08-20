@@ -3,6 +3,7 @@ package com.sky.mapper;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -66,4 +67,8 @@ public interface SetmealMapper {
      * @param id
      */
     void deleteById(Long id);
+
+    List<Setmeal> list(Setmeal setmeal);
+
+    List<DishItemVO> getByDish(Long id);
 }

@@ -80,4 +80,19 @@
         FROM setmeal_dish
         WHERE setmeal_dish.setmeal_id = #{setmealId}
     </select>
+    <select id="list" resultType="com.sky.entity.Setmeal">
+        select * from setmeal
+        <where>
+            <if test="name != null"> and name like concat('%',#{name},'%') </if>
+            <if test="categoryId != null"> and category_id = #{categoryId} </if>
+            <if test="status != null"> and status = #{status} </if>
+        </where>
+    </select>
+    <select id="getByDish" resultType="com.sky.vo.DishItemVO">
+        select d.id, d.name, d.image, d.description, sd.copies
+        from dish d
+        left join setmeal_dish sd on d.id = sd.dish_id
+        where sd.setmeal_id = #{setmealId}
+    </select>
+
 </mapper>

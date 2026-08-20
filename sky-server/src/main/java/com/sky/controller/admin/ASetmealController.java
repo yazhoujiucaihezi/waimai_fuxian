@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/admin/setmeal")
-public class SetmealController {
+public class ASetmealController {
 
     @Autowired
     private SetmealService setmealService;
