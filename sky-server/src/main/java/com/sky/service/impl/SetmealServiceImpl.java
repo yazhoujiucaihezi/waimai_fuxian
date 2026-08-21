@@ -17,6 +17,9 @@ import com.sky.vo.DishVO;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,6 +30,7 @@ import java.util.List;
  * 套餐业务层实现类
  */
 @Service
+@EnableCaching
 public class SetmealServiceImpl implements SetmealService {
 
     @Autowired
@@ -48,6 +52,7 @@ public class SetmealServiceImpl implements SetmealService {
      * 新增套餐
      * @param setmealDTO
      */
+    @CacheEvict(cacheNames = "setmeal", allEntries = true)
     public void save(SetmealDTO setmealDTO) {
 
         Setmeal setmeal = new Setmeal();
@@ -69,7 +74,7 @@ public class SetmealServiceImpl implements SetmealService {
             setmealMapper.saveSetmealDishes(setmealDishes);
         }
 
-        }
+    }
 
     /**
      * 根据id查询套餐
@@ -90,6 +95,7 @@ public class SetmealServiceImpl implements SetmealService {
      * 修改套餐
      * @param setmealDTO
      */
+    @CacheEvict(cacheNames = "setmeal", allEntries = true)
     public void update(SetmealDTO setmealDTO) {
         Setmeal setmeal = new Setmeal();
         BeanUtils.copyProperties(setmealDTO, setmeal);
@@ -104,11 +110,11 @@ public class SetmealServiceImpl implements SetmealService {
             }
         }
 
-            setmealMapper.deleteSetmealDishesBySetmealId(id);
+        setmealMapper.deleteSetmealDishesBySetmealId(id);
 
-            System.out.println("setmealDishes = " + setmealDishes);
+        System.out.println("setmealDishes = " + setmealDishes);
 
-            setmealMapper.saveSetmealDishes(setmealDishes);
+        setmealMapper.saveSetmealDishes(setmealDishes);
     }
 
     /**
@@ -116,6 +122,7 @@ public class SetmealServiceImpl implements SetmealService {
      * @param status
      * @param id
      */
+    @CacheEvict(cacheNames = "setmeal", allEntries = true)
     public void updateStatus(Integer status, Long id) {
         Setmeal setmeal = new Setmeal();
         setmeal.setStatus(status);
@@ -129,19 +136,24 @@ public class SetmealServiceImpl implements SetmealService {
      * 删除套餐
      * @param ids
      */
+    @CacheEvict(cacheNames = "setmeal", allEntries = true)
     public void delete(List<Long> ids) {
         for (Long id : ids){
             setmealMapper.deleteById(id);
         }
     }
 
+    @Cacheable(cacheNames = "setmeal", key = "#p0.categoryId")
+    /**
+     * 查询套餐列表
+     */
     public List<Setmeal> list(Setmeal setmeal) {
 
         List<Setmeal> setmealList = setmealMapper.list(setmeal);
         return setmealList;
     }
 
-    @Override
+
     public List<DishItemVO> getByDish(Long id) {
         return setmealMapper.getByDish(id);
     }

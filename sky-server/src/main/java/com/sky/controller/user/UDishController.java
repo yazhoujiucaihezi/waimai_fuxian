@@ -28,16 +28,8 @@ public class UDishController {
     @GetMapping("/list")
     public Result<List<DishVO>> list(Long categoryId) {
 
-        String key = "dish" + categoryId;
         log.info("用户查询菜品列表 {}", categoryId);
-
-        List<DishVO> dishVOList = (List<DishVO>) redisTemplate.opsForValue().get(key);
-        if (dishVOList != null) {
-            return Result.success(dishVOList);
-        }
-
         List<DishVO> list = dishService.list(categoryId);
-        redisTemplate.opsForValue().set(key, list);
         return Result.success(list);
     }
 }

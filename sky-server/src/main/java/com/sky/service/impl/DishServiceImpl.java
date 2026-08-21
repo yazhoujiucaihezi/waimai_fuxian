@@ -12,18 +12,26 @@ import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+
 /**
  * 菜品业务层实现类
  */
 @Service
+@EnableCaching
+@Slf4j
 public class DishServiceImpl implements DishService {
 
     @Autowired
@@ -56,7 +64,7 @@ public class DishServiceImpl implements DishService {
     /**
      * 新增菜品
      */
-    @Override
+    @CacheEvict(cacheNames = "dish", allEntries = true)
     public void save(DishDTO dishDTO) {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
@@ -79,8 +87,10 @@ public class DishServiceImpl implements DishService {
     /**
      * 修改菜品
      */
+    @CacheEvict(cacheNames = "dish", allEntries = true)
     public void update(DishDTO dishDTO) {
         Dish dish = new Dish();
+        log.info("categoryId={}", dishDTO.getCategoryId());
         BeanUtils.copyProperties(dishDTO, dish);
         dish.setUpdateTime(LocalDateTime.now());
         dish.setUpdateUser(BaseContext.getCurrentId());
@@ -98,14 +108,16 @@ public class DishServiceImpl implements DishService {
     /**
      * 批量删除菜品
      */
+    @CacheEvict(cacheNames = "dish", allEntries = true)
     public void delete(List<Long> ids) {
-       for (Long id : ids)
-           dishMapper.deleteById(id);
+        for (Long id : ids)
+            dishMapper.deleteById(id);
     }
 
     /**
      * 修改菜品状态
      */
+    @CacheEvict(cacheNames = "dish", allEntries = true)
     public void startOrStop(Integer status, Long id) {
         Dish dish = new Dish();
         dish.setStatus(status);
@@ -119,6 +131,7 @@ public class DishServiceImpl implements DishService {
      * @param categoryId
      * @return
      */
+    @Cacheable(cacheNames = "dish", key = "#p0")
     public List<DishVO> list(Long categoryId) {
         List<DishVO> list = dishMapper.list(categoryId);
         return list;
