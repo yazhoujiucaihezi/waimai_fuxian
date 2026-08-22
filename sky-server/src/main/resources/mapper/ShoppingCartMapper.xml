@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.ShoppingCartMapper">
+
+    <insert id="add">
+    insert into shopping_cart (name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time)
+    VALUES (#{name},#{image},#{userId},#{dishId},#{setmealId},#{dishFlavor},#{number},#{amount},#{createTime})
+
+    </insert>
+    <update id="update">
+        update shopping_cart set number = #{number}, amount = #{amount} where user_id = #{userId} and dish_id = #{dishId}
+    </update>
+    <delete id="deleteById">
+        delete from shopping_cart where user_id = #{userId} and dish_id = #{dishId}
+    </delete>
+    <delete id="clean">
+        delete from shopping_cart where user_id = #{currentId}
+    </delete>
+    <select id="list" resultType="com.sky.entity.ShoppingCart">
+        select * from shopping_cart where user_id = #{userId}
+    </select>
+    <select id="getByDishId" resultType="com.sky.entity.ShoppingCart">
+        select * from shopping_cart where user_id = #{userId} and dish_id = #{dishId}
+    </select>
+</mapper>
