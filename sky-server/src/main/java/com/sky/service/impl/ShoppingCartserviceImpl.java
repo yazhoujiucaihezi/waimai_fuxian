@@ -33,17 +33,33 @@ public class ShoppingCartserviceImpl implements ShoppingCartService {
         shoppingCart.setImage(dishVO.getImage());
         shoppingCart.setName(dishVO.getName());
         shoppingCart.setAmount(dishVO.getPrice());
-        if(shoppingCart.getNumber() == null){
+        ShoppingCart sc = shoppingCartMapper.getByDishId(BaseContext.getCurrentId(), dto.getDishId());
+        if(sc == null){
             shoppingCart.setNumber(1);
+            shoppingCartMapper.add(shoppingCart);
         }else {
-            Integer number = shoppingCart.getNumber();
-            shoppingCart.setNumber(number + 1);
+           shoppingCart.setNumber(sc.getNumber() + 1);
+           shoppingCartMapper.update(shoppingCart);
         }
-        shoppingCartMapper.add(shoppingCart);
+
     }
 
     public List<ShoppingCart> list() {
         Long id = BaseContext.getCurrentId();
         return shoppingCartMapper.list(id);
+    }
+
+    public void sub(ShoppingCartDTO dto) {
+        ShoppingCart shoppingCart = shoppingCartMapper.getByDishId(BaseContext.getCurrentId(), dto.getDishId());
+        if(shoppingCart.getNumber() > 1){
+            shoppingCart.setNumber(shoppingCart.getNumber() - 1);
+            shoppingCartMapper.update(shoppingCart);
+        }else {
+            shoppingCartMapper.deleteById(BaseContext.getCurrentId(), dto.getDishId());
+        }
+    }
+
+    public void clean() {
+        shoppingCartMapper.clean(BaseContext.getCurrentId());
     }
 }
