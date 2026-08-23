@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.OrderMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into orders (number, user_id, pay_method, status, amount, remark, order_time,address_book_id)
+        values (#{number}, #{userId}, #{payMethod}, #{status}, #{amount}, #{remark}, #{orderTime}, #{addressBookId});
+    </insert>
+    <update id="update">
+        update orders
+        <set>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="payMethod != null">
+                pay_method = #{payMethod},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="orderTime != null">
+                order_time = #{orderTime},
+            </if>
+            <if test="payStatus != null">
+                pay_status = #{payStatus},
+            </if>
+            <if test="deliveryTime != null">
+                delivery_time = #{deliveryTime},
+            </if>
+            <if test="estimatedDeliveryTime != null">
+                estimated_delivery_time = #{estimatedDeliveryTime},
+            </if>
+        </set>
+                      where id = #{id};
+    </update>
+    <select id="getBynumber" resultType="com.sky.entity.Orders">
+        select * from orders where number = #{number}
+    </select>
+</mapper>
