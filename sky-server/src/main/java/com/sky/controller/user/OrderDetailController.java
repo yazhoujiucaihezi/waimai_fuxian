@@ -4,6 +4,7 @@ import com.sky.entity.OrderDetail;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.result.Result;
 import com.sky.service.OrderDetailService;
+import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +21,10 @@ public class OrderDetailController {
     private OrderDetailService orderDetailService;
 
     @GetMapping("/{id}")
-    public Result<OrderDetail> getOrderDetailById(@PathVariable Long id) {
+    public Result<OrderVO> getOrderDetailById(@PathVariable("id") Long id) {
         log.info("根据id查询订单详情");
-        OrderDetail orderDetailById = orderDetailService.getOrderDetailById(id);
-        return Result.success(orderDetailById);
+        OrderVO orderVO = orderDetailService.getOrderDetailById(id);
+        return Result.success(orderVO);
     }
 
 

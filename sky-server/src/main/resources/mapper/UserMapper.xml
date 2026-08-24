@@ -7,4 +7,7 @@
         insert into user (openid, create_time, name, phone, sex, id_number, avatar)
         values (#{openid}, #{createTime}, #{name}, #{phone}, #{sex}, #{idNumber}, #{avatar})
     </insert>
+    <select id="getById" resultType="com.sky.entity.User" parameterType="java.lang.Long">
+        select * from user where id = #{id}
+    </select>
 </mapper>

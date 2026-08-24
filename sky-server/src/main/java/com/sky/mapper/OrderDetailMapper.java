@@ -10,7 +10,7 @@ import java.util.List;
 public interface OrderDetailMapper {
     void insertBatch(@Param("list") List<OrderDetail> details);
 
-    OrderDetail getOrderDetailById(Long id);
+    List<OrderDetail> getOrderDetailById(@Param("id") Long id);
 
     List<OrderDetail> getByOrderId(Long id);
 }

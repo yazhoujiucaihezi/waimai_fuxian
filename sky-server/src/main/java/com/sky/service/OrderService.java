@@ -14,5 +14,7 @@ public interface OrderService {
 
     OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO);
 
-    PageResult historyOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+    PageResult pageQuery4User(int page, int pageSize, Integer status);
+
+    void cancel(Long id);
 }

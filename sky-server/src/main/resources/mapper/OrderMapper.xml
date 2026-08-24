@@ -3,8 +3,40 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.OrderMapper">
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into orders (number, user_id, pay_method, status, amount, remark, order_time,address_book_id)
-        values (#{number}, #{userId}, #{payMethod}, #{status}, #{amount}, #{remark}, #{orderTime}, #{addressBookId});
+        insert into orders
+        (
+            number,
+            user_id,
+            address_book_id,
+            status,
+            order_time,
+            pay_method,
+            amount,
+            remark,
+            phone,
+            address,
+            user_name,
+            consignee,
+            pack_amount,
+            tableware_number
+        )
+        values
+            (
+                #{number},
+                #{userId},
+                #{addressBookId},
+                #{status},
+                #{orderTime},
+                #{payMethod},
+                #{amount},
+                #{remark},
+                #{phone},
+                #{address},
+                #{userName},
+                #{consignee},
+                #{packAmount},
+                #{tablewareNumber}
+            )
     </insert>
     <update id="update">
         update orders
@@ -12,35 +44,123 @@
             <if test="status != null">
                 status = #{status},
             </if>
-            <if test="payMethod != null">
-                pay_method = #{payMethod},
+
+            <if test="userId != null">
+                user_id = #{userId},
             </if>
-            <if test="remark != null">
-                remark = #{remark},
+
+            <if test="addressBookId != null">
+                address_book_id = #{addressBookId},
             </if>
+
             <if test="orderTime != null">
                 order_time = #{orderTime},
             </if>
+
+            <if test="checkoutTime != null">
+                checkout_time = #{checkoutTime},
+            </if>
+
+            <if test="payMethod != null">
+                pay_method = #{payMethod},
+            </if>
+
             <if test="payStatus != null">
                 pay_status = #{payStatus},
             </if>
-            <if test="deliveryTime != null">
-                delivery_time = #{deliveryTime},
+
+            <if test="amount != null">
+                amount = #{amount},
             </if>
+
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+
+            <if test="address != null">
+                address = #{address},
+            </if>
+
+            <if test="userName != null">
+                user_name = #{userName},
+            </if>
+
+            <if test="consignee != null">
+                consignee = #{consignee},
+            </if>
+
+            <if test="cancelReason != null">
+                cancel_reason = #{cancelReason},
+            </if>
+
+            <if test="rejectionReason != null">
+                rejection_reason = #{rejectionReason},
+            </if>
+
+            <if test="cancelTime != null">
+                cancel_time = #{cancelTime},
+            </if>
+
             <if test="estimatedDeliveryTime != null">
                 estimated_delivery_time = #{estimatedDeliveryTime},
             </if>
+
+            <if test="deliveryStatus != null">
+                delivery_status = #{deliveryStatus},
+            </if>
+
+            <if test="deliveryTime != null">
+                delivery_time = #{deliveryTime},
+            </if>
+
+            <if test="packAmount != null">
+                pack_amount = #{packAmount},
+            </if>
+
+            <if test="tablewareNumber != null">
+                tableware_number = #{tablewareNumber},
+            </if>
+
+            <if test="tablewareStatus != null">
+                tableware_status = #{tablewareStatus},
+            </if>
+
         </set>
-                      where id = #{id};
+        where id = #{id}
     </update>
     <select id="getBynumber" resultType="com.sky.entity.Orders">
         select * from orders where number = #{number}
     </select>
-    <select id="historyOrders" resultType="com.sky.vo.OrderVO">
-        select * from orders where user_id = #{userId}
-        <if test="status != null">
-            and status = #{status}
-        </if>
+    <select id="getById" resultType="com.sky.entity.Orders" parameterType="java.lang.Long">
+        select * from orders where id = #{id}
+    </select>
+
+    <select id="pageQuery" resultType="com.sky.entity.Orders">
+        select * from orders
+        <where>
+            <if test="number != null and number!=''">
+                and number like concat('%',#{number},'%')
+            </if>
+            <if test="phone != null and phone!=''">
+                and phone like concat('%',#{phone},'%')
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="beginTime != null">
+                and order_time >= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and order_time &lt; #{endTime}
+            </if>
+        </where>
         order by order_time desc
     </select>
 </mapper>

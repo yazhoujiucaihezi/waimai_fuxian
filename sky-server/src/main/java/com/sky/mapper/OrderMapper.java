@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.Orders;
@@ -19,5 +20,7 @@ public interface OrderMapper {
 
     void update(Orders orders);
 
-    List<OrderVO> historyOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+    Orders getById(Long id);
+
+    Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 }
