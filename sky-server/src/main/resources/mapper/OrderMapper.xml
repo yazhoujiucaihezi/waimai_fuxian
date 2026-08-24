@@ -36,4 +36,11 @@
     <select id="getBynumber" resultType="com.sky.entity.Orders">
         select * from orders where number = #{number}
     </select>
+    <select id="historyOrders" resultType="com.sky.vo.OrderVO">
+        select * from orders where user_id = #{userId}
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        order by order_time desc
+    </select>
 </mapper>

@@ -26,13 +26,16 @@ public class ShoppingCartserviceImpl implements ShoppingCartService {
 
     public void add(ShoppingCartDTO dto) {
         ShoppingCart shoppingCart = new ShoppingCart();
-        BeanUtils.copyProperties(dto, shoppingCart);
         DishVO dishVO = dishMapper.getDishById(dto.getDishId());
         shoppingCart.setCreateTime(LocalDateTime.now());
         shoppingCart.setUserId(BaseContext.getCurrentId());
         shoppingCart.setImage(dishVO.getImage());
         shoppingCart.setName(dishVO.getName());
         shoppingCart.setAmount(dishVO.getPrice());
+        shoppingCart.setDishFlavor(dto.getDishFlavor());
+        shoppingCart.setSetmealId(dto.getSetmealId());
+        shoppingCart.setDishId(dto.getDishId());
+
         ShoppingCart sc = shoppingCartMapper.getByDishId(BaseContext.getCurrentId(), dto.getDishId());
         if(sc == null){
             shoppingCart.setNumber(1);

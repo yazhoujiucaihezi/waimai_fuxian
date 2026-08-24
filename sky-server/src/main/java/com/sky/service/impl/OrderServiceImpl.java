@@ -1,6 +1,10 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersDTO;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.OrderDetail;
@@ -9,10 +13,12 @@ import com.sky.entity.ShoppingCart;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShoppingCartMapper;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderOverViewVO;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -31,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     private ShoppingCartMapper shoppingCartMapper;
     @Autowired
     private OrderDetailMapper orderDetailMapper;
+
     public OrderSubmitVO submit(OrdersSubmitDTO dto) {
         List<ShoppingCart> cartList = shoppingCartMapper.list(BaseContext.getCurrentId());
         Orders orders = new Orders();
@@ -59,7 +66,9 @@ public class OrderServiceImpl implements OrderService {
             detail.setImage(cart.getImage());
             detail.setAmount(cart.getAmount());
             detail.setNumber(cart.getNumber());
-
+            detail.setDishId(cart.getDishId());
+            detail.setSetmealId(cart.getSetmealId());
+            detail.setDishFlavor(cart.getDishFlavor());
             details.add(detail);
         }
         orderDetailMapper.insertBatch(details);
@@ -88,5 +97,20 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(orders);
         orderPaymentVO.setEstimatedDeliveryTime(orders.getEstimatedDeliveryTime());
         return orderPaymentVO;
+    }
+
+    public PageResult historyOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+        List<OrderVO> orderVOS = orderMapper.historyOrders(ordersPageQueryDTO);
+        for(OrderVO orderVO : orderVOS){
+
+            List<OrderDetail> details =
+                    orderDetailMapper.getByOrderId(orderVO.getId());
+
+            orderVO.setOrderDetailList(details);
+        }
+        Page<OrderVO> page = (Page<OrderVO>) orderVOS;
+        return new PageResult(page.getTotal(), page.getResult());
     }
 }
