@@ -9,18 +9,29 @@
 
     </insert>
     <update id="update">
+    <if test="setmealId != null">
+        update shopping_cart set number = #{number}, amount = #{amount} where user_id = #{userId} and setmeal_id = #{setmealId}
+    </if>
+    <if test="dishId != null">
         update shopping_cart set number = #{number}, amount = #{amount} where user_id = #{userId} and dish_id = #{dishId}
+    </if>
     </update>
-    <delete id="deleteById">
+    <delete id="deleteByDishId">
         delete from shopping_cart where user_id = #{userId} and dish_id = #{dishId}
     </delete>
     <delete id="clean">
         delete from shopping_cart where user_id = #{currentId}
+    </delete>
+    <delete id="deleteBySetmealId">
+        delete from shopping_cart where user_id = #{currentId} and setmeal_id = #{setmealId}
     </delete>
     <select id="list" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart where user_id = #{userId}
     </select>
     <select id="getByDishId" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart where user_id = #{userId} and dish_id = #{dishId}
+    </select>
+    <select id="getBySetmealId" resultType="com.sky.entity.ShoppingCart">
+        select * from shopping_cart where user_id = #{currentId} and setmeal_id = #{setmealId}
     </select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.sky.mapper;
 
-import com.sky.context.BaseContext;
 import com.sky.entity.ShoppingCart;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,7 +16,11 @@ public interface ShoppingCartMapper {
 
     void update(ShoppingCart shoppingCart);
 
-    void deleteById(Long userId, Long dishId);
+    void deleteByDishId(Long userId, Long dishId);
 
     void clean(Long currentId);
+
+    ShoppingCart getBySetmealId(Long currentId, Long setmealId);
+
+    void deleteBySetmealId(Long currentId, Long setmealId);
 }

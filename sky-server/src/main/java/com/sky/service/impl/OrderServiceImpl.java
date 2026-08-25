@@ -11,10 +11,7 @@ import com.sky.entity.*;
 import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
-import com.sky.vo.OrderOverViewVO;
-import com.sky.vo.OrderPaymentVO;
-import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
+import com.sky.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,6 +36,8 @@ public class OrderServiceImpl implements OrderService {
     private AddressBookMapper addressBookMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private DishMapper dishMapper;
 
     static final Integer DELIVERY_FEE = 6;
 
@@ -126,10 +125,10 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 支付
-     *
      * @param ordersPaymentDTO
      * @return
      */
+    @Transactional
     public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) {
         OrderPaymentVO orderPaymentVO = new OrderPaymentVO();
         Orders orders = new Orders();
@@ -150,7 +149,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 用户端订单分页查询
-     *
      * @param pageNum
      * @param pageSize
      * @param status
@@ -196,5 +194,24 @@ public class OrderServiceImpl implements OrderService {
         Orders orders = orderMapper.getById(id);
         orders.setStatus(Orders.CANCELLED);
         orderMapper.update(orders);
+    }
+
+    @Transactional
+    public void repetition(Long id) {
+        Orders orders = orderMapper.getById(id);
+        List<OrderDetail> orderDetails = orderDetailMapper.getByOrderId(orders.getId());
+        orderDetails.forEach(orderDetail -> {
+            ShoppingCart shoppingCart = new ShoppingCart();
+            shoppingCart.setUserId(BaseContext.getCurrentId());
+            shoppingCart.setName(orderDetail.getName());
+            shoppingCart.setImage(orderDetail.getImage());
+            shoppingCart.setDishId(orderDetail.getDishId());
+            shoppingCart.setSetmealId(orderDetail.getSetmealId());
+            shoppingCart.setDishFlavor(orderDetail.getDishFlavor());
+            shoppingCart.setNumber(orderDetail.getNumber());
+            shoppingCart.setAmount(orderDetail.getAmount());
+            shoppingCartMapper.add(shoppingCart);
+        });
+
     }
 }
