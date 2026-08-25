@@ -23,4 +23,8 @@ public interface OrderMapper {
     Orders getById(Long id);
 
     Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    Long getNumber();
+
+    Integer getNumberBystatus(Integer status);
 }

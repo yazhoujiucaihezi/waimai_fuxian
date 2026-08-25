@@ -1,16 +1,12 @@
 package com.sky.controller.user;
 
-import com.sky.dto.OrdersDTO;
-import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
-import com.sky.entity.Orders;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user/order")
 @Slf4j
-public class OrderController {
+public class UOrderController {
 
     @Autowired
     private OrderService orderService;
@@ -59,7 +55,7 @@ public class OrderController {
     @PutMapping("/cancel/{id}")
     public Result cancel(@PathVariable Long id){
         log.info("用户取消订单：{}", id);
-        orderService.cancel(id);
+        orderService.cancel4User(id);
         return Result.success();
     }
 
@@ -70,7 +66,8 @@ public class OrderController {
      */
     @PostMapping("/repetition/{id}")
     public Result repetition(@PathVariable Long id){
-        orderService.repetition(id);
+        log.info("再来一单：{}", id);
+        orderService.repetition4User(id);
         return Result.success();
 
     }
