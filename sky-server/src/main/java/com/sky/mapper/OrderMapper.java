@@ -6,7 +6,9 @@ import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -32,4 +34,8 @@ public interface OrderMapper {
                         @Param("orderTime") LocalDateTime orderTime);
 
     LocalDateTime getOrderTimeBystatus(@Param("unpaidStatus") Integer unpaidStatus);
+
+    Double getAmount(LocalDateTime beginTime, LocalDateTime endTime, Integer status);
+
+    Integer getUserCount(Map map);
 }
