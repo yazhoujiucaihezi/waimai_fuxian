@@ -132,6 +132,17 @@
         </set>
         where id = #{id}
     </update>
+    <update id="updateByStatus">
+        update orders
+        <set>
+        status = #{newStatus},
+            cancel_reason = #{cancelReason},
+            cancel_time = #{cancelTime},
+            delivery_time = #{deliveryTime},
+        </set>
+        where status = #{oldStatus}
+        and order_time &lt; #{orderTime}
+    </update>
     <select id="getBynumber" resultType="com.sky.entity.Orders">
         select * from orders where number = #{number}
     </select>
@@ -168,5 +179,8 @@
     </select>
     <select id="getNumberBystatus" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         select count(*) from orders where status = #{status};
+    </select>
+    <select id="getOrderTimeBystatus" resultType="java.time.LocalDateTime" parameterType="java.lang.Integer">
+        select order_time from orders where status = #{unpaidStatus};
     </select>
 </mapper>

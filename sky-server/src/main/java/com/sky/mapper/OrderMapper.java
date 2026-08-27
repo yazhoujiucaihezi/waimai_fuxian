@@ -2,13 +2,11 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.Orders;
-import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Mapper
 public interface OrderMapper {
@@ -27,4 +25,11 @@ public interface OrderMapper {
     Long getNumber();
 
     Integer getNumberBystatus(Integer status);
+
+    void updateByStatus(@Param("oldStatus") Integer oldStatus, @Param("newStatus") Integer newStatus,
+                        @Param("cancelReason") String cancelReason, @Param("cancelTime") LocalDateTime cancelTime,
+                        @Param("deliveryTime") LocalDateTime deliveryTime,
+                        @Param("orderTime") LocalDateTime orderTime);
+
+    LocalDateTime getOrderTimeBystatus(@Param("unpaidStatus") Integer unpaidStatus);
 }

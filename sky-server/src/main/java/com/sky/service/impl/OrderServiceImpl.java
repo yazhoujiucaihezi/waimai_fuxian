@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.WebSocket.WebSocketServer;
 import com.sky.context.BaseContext;
 import com.sky.dto.*;
 import com.sky.entity.*;
@@ -18,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Component
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -48,7 +51,8 @@ public class OrderServiceImpl implements OrderService {
     private String shopAddress;
     @Value("${sky.baidu.ak}")
     private String ak;
-
+    @Autowired
+    private WebSocketServer webSocketServer;
     static final Integer DELIVERY_FEE = 6;
 
     /**
@@ -155,6 +159,14 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.update(orders);
 
+        //来单提醒 type orderId content
+        Map map = new HashMap();
+        map.put("type",1);
+        map.put("orderId",orders.getId());
+        map.put("content","订单号：" + number);
+
+        String json = JSON.toJSONString(map);//将map转成JSON字符串
+        webSocketServer.sendToAllClient(json); // Send JSON string to all connected clients
         BeanUtils.copyProperties(orders, orderPaymentVO);
         return orderPaymentVO;
     }
@@ -202,12 +214,17 @@ public class OrderServiceImpl implements OrderService {
      *
      * @param id
      */
+    @Transactional
     public void cancel4User(Long id) {
         Orders orders = orderMapper.getById(id);
         orders.setStatus(Orders.CANCELLED);
         orderMapper.update(orders);
     }
 
+    /**
+     * 用户端订单重复
+     * @param id
+     */
     @Transactional
     public void repetition4User(Long id) {
         Orders orders = orderMapper.getById(id);
@@ -227,6 +244,11 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    /**
+     * 订单分页查询
+     * @param dto
+     * @return
+     */
     public PageResult pageQuery4Admin(OrdersPageQueryDTO dto) {
         PageHelper.startPage(dto.getPage(), dto.getPageSize());
 
@@ -272,6 +294,10 @@ public class OrderServiceImpl implements OrderService {
         return orderStatisticsVO;
     }
 
+    /**
+     * 确认
+     * @param ordersConfirmDTO
+     */
     @Transactional
     public void confirm(OrdersConfirmDTO ordersConfirmDTO) {
         ordersConfirmDTO.setStatus(Orders.CONFIRMED);
@@ -280,6 +306,10 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(orders);
     }
 
+    /**
+     * 拒绝
+     * @param ordersRejectionDTO
+     */
     @Transactional
     public void rejection(OrdersRejectionDTO ordersRejectionDTO) {
        Orders orders = new Orders();
@@ -291,6 +321,10 @@ public class OrderServiceImpl implements OrderService {
        orderMapper.update(orders);
     }
 
+    /**
+     * 取消
+     * @param ordersCancelDTO
+     */
     @Transactional
     public void cancel4Admin(OrdersCancelDTO ordersCancelDTO) {
         Orders orders = new Orders();
@@ -325,6 +359,19 @@ public class OrderServiceImpl implements OrderService {
        orders.setId(id);
        orders.setDeliveryTime(LocalDateTime.now());
        orderMapper.update(orders);
+    }
+
+    /**
+     * 催单
+     * @param id
+     */
+    public void reminder(Long id) {
+        Map map = new HashMap();
+        map.put("type",2);
+        map.put("orderId",id);
+        map.put("content","用户催单："+"订单号：" + orderMapper.getById(id).getNumber());
+        String json = JSON.toJSONString(map);//将map转成JSON字符串
+        webSocketServer.sendToAllClient(json); // Send JSON string to all connected clients
     }
 
     /**
