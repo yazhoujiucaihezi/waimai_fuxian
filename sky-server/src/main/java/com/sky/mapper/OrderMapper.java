@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -38,4 +40,8 @@ public interface OrderMapper {
     Double getAmount(LocalDateTime beginTime, LocalDateTime endTime, Integer status);
 
     Integer getUserCount(Map map);
+
+    Integer getOrderCount(Map map);
+
+    List<Long> getIdByStatus(Integer status, LocalDate begin, LocalDate end);
 }

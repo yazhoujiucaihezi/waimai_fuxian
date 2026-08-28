@@ -13,4 +13,6 @@ public interface OrderDetailMapper {
     List<OrderDetail> getOrderDetailById(@Param("id") Long id);
 
     List<OrderDetail> getByOrderId(Long id);
+
+    Long getByDishIdByOrderId(Long id);
 }

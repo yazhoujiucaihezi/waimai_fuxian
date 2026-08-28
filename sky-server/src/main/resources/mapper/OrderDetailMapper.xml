@@ -15,4 +15,7 @@
     <select id="getByOrderId" resultType="com.sky.entity.OrderDetail">
         select * from order_detail where order_id = #{orderId}
     </select>
+    <select id="getByDishIdByOrderId" resultType="java.lang.Long" parameterType="java.lang.Long">
+        select dish_id from order_detail where order_id = #{orderId}
+    </select>
 </mapper>

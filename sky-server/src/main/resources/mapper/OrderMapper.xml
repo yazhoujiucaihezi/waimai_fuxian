@@ -209,4 +209,25 @@
             </if>
         </where>
     </select>
+    <select id="getOrderCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(id) from orders
+        <where>
+            <if test="beginTime != null">
+                and order_time &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and order_time &lt;= #{endTime}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="getIdByStatus" resultType="java.lang.Long">
+        select id
+        from orders
+        where status = #{status}
+          and order_time &gt;= #{begin}
+          and order_time &lt;= #{end}
+    </select>
 </mapper>
