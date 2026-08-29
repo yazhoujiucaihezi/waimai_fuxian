@@ -49,4 +49,6 @@ public interface DishMapper {
      * @return
      */
     List<DishVO> list(Long categoryId);
+
+    Integer countDishByStatus(Integer status);
 }

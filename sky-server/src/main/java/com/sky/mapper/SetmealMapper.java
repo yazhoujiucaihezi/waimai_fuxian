@@ -71,4 +71,6 @@ public interface SetmealMapper {
     List<Setmeal> list(Setmeal setmeal);
 
     List<DishItemVO> getByDish(Long id);
+
+    Integer countSetmealByStatus(Integer status);
 }

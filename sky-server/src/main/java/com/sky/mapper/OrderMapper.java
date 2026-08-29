@@ -37,11 +37,17 @@ public interface OrderMapper {
 
     LocalDateTime getOrderTimeBystatus(@Param("unpaidStatus") Integer unpaidStatus);
 
-    Double getAmount(LocalDateTime beginTime, LocalDateTime endTime, Integer status);
+    Double getAmount(
+            @Param("beginTime") LocalDateTime beginTime,
+            @Param("endTime") LocalDateTime endTime,
+            @Param("status") Integer status
+    );
 
     Integer getUserCount(Map map);
 
     Integer getOrderCount(Map map);
 
     List<Long> getIdByStatus(Integer status, LocalDate begin, LocalDate end);
+
+    Integer getOrderCountByStatus(Integer status);
 }

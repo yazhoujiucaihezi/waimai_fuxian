@@ -56,4 +56,12 @@
         where category_id = #{categoryId}
         order by id desc
     </select>
+    <select id="countDishByStatus" resultType="java.lang.Integer">
+        select count(*) from dish
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
 </mapper>
