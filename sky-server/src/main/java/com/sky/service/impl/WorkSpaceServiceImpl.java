@@ -28,12 +28,16 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
     @Autowired
     private SetmealMapper setmealMapper;
 
-    public BusinessDataVO getBusinessData() {
+    /**
+     * 查询工作台数据
+     * @return
+     */
+    public BusinessDataVO getBusinessData(LocalDateTime beginTime, LocalDateTime endTime) {
 
         // 获取当前日期
         LocalDate now = LocalDate.now();
-        LocalDateTime beginTime = now.atStartOfDay();
-        LocalDateTime endTime = now.atTime(23, 59, 59);
+       beginTime = now.atStartOfDay();
+        endTime = now.atTime(23, 59, 59);
 
         Integer status = Orders.COMPLETED;
 
